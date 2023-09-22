@@ -1,2 +1,2 @@
 # tudm99.github.io
-Path
+Write-ups and such
