@@ -84,6 +84,7 @@ Let's try logging in with the credentials we gathered, because the exploit requi
 (Meanwhile I also enumerated the wordpress site and found the user “support”. I'll save it, maybe it'll come in handy)
 
 Aaaand we logged in:
+
 ![Subrion Dash](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/3.png)
 
 ## Exploitation
@@ -157,6 +158,7 @@ LFILE=/root/root.txt
 sudo iconv -f 8859_1 -t 8859_1 "$LFILE"
 ```
 And we got the flag!
+
 ![Flag](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/4.png)
 
 
