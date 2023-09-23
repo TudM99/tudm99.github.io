@@ -2,7 +2,7 @@
 ---
 layout: default
 title: Internal
-description: Internal - Writeup
+description: THM - Internal
 ---
 
 # TryHackMe - Internal
