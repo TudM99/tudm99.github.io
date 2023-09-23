@@ -57,7 +57,7 @@ I tried inputing different values (1, 0, etc) no output was given, I tried a php
 
 I then figured out that the “id” parameter must be stored in a database. So I saved the request and threw it in sqlmap.
 
-If you set the value of “id” to “*” ("id":"*"), sqlmap will know where to look.
+If you set the value of “id” to “***” ("id":"***"), sqlmap will know where to look.
 ```
 sqlmap -r pcsql --dump-all --batch
 ```
