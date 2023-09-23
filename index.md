@@ -11,3 +11,9 @@ I'm gonna be posting my cybersecurity progress, and other stuff I find interesti
 
 ## [HackTheBox - PC](/machines/pc.html).
 > Linux Machine; gRPC; Running Services Enumeration; SQLite Injection; pyLoad;
+
+## [TryHackMe - Wekor](/machines/wekor.html).
+> Linux Machine; Running Services; PATH Manipulation for Privesc; SQL Injection; Wordpress Theme Shell; Memcached;
+
+## [TryHackMe - Tech_Supp0rt: 1](/machines/internal.html).
+> SMB Enumeration; Wordpress; Subrion CMS CVE;
