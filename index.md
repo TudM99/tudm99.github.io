@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-I'm gonna be posting my cybersecurity progress, and other stuff I find interesting.
+I'm gonna be posting my cybersecurity progress, and some issues I noticed while practicing in hospitals.
 
 ## [TryHackMe - Retro](./retro.md).
 > Windows Machine; Wordpress Theme Shell; Metasploit;
