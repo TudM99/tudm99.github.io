@@ -123,6 +123,7 @@ $ python3 -c 'import pty; pty.spawn("/bin/bash")'
 www-data@TechSupport:/$
 ```
 We cd into the /opt directory, empty.
+
 Cd into the /home directory, there's the scamsite directory with the “enter.txt” file we found earlier.
 
 So i'll start looking for SUID binaries, since we don't have sudo permissions.
@@ -130,6 +131,7 @@ So i'll start looking for SUID binaries, since we don't have sudo permissions.
 find / -perm -u=s -type f 2>/dev/null
 ```
 No luck there, so we start snooping around. You can check default locations, or you can use linpeas.
+
 I opted for linpeas.
 ```
 /var/www/html/wordpress/wp-config.php
@@ -139,6 +141,7 @@ define( 'DB_PASSWORD', '[REDACTED]' );
 define( 'DB_HOST', 'localhost' );
 ```
 And what do you know, it found a pasword for the user “support”. I'll try to ssh into the machine using the “scamsite” user that we found, and this password.
+
 Aaand it worked.
 
 Let's see what we can do from this user. First of all, I'm gonna ssh into the machine for a more stable shell.
