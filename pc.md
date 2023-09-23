@@ -1,3 +1,0 @@
-# HackTheBox - PC
-
-## Enumeration
