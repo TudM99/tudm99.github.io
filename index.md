@@ -1,7 +1,9 @@
 ---
 layout: default
 ---
-I'm gonna be posting my cybersecurity progress, and some issues I noticed while practicing in hospitals.
+I'm gonna be posting some writeups, and some issues I noticed while practicing in hospitals.
+
+I'll try adding how many of my past machines I can, going over them again with a new perspective.
 
 ## [TryHackMe - Retro](./retro.md).
 > Windows Machine; Wordpress Theme Shell; Metasploit;
