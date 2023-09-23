@@ -37,7 +37,7 @@ Let's read through some posts.
 
 Alright, found nothing, but there was a single comment.
 
-[image](https://github.com/TudM99/tudm99.github.io/blob/main/images/retro_01.png)
+![image](https://github.com/TudM99/tudm99.github.io/blob/main/images/retro_01.png)
 
 Let's try logging into wordpress with that word as a password, and I'll try a few usernames like wade, admin, etc.
 
