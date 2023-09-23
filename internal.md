@@ -23,9 +23,9 @@ Nmap done: 1 IP address (1 host up) scanned in 32.14 seconds
 
 Gobuster:
 ```
-/blog       (Status: 301) [Size: 309]
-/wordpress	 (Status: 301) [Size: 314]
-/javascript	(Status: 301)
+/blog
+/wordpress
+/javascript
 ```
 WPscan:
 ```
