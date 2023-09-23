@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Another page
-description: This is just another page
+title: Internal
+description: THM - Internal
 ---
 
-## Welcome to another page
+# TryHackMe - Internal
 
-_yay_
+## Enumeration
 
 [back](./)
