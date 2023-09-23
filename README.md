@@ -1,2 +1,1 @@
-# TryHackMe - Retro
-Write-ups and such
+# tudor.mindra - cybersecurity progress and other stuff I find interesting
