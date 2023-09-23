@@ -8,3 +8,6 @@ I'm gonna be posting my cybersecurity progress, and other stuff I find interesti
 
 ## [TryHackMe - Internal](/machines/internal.html).
 > Linux Machine; Wordpress Theme Shell; SSH Tunneling; Jenkins;
+
+## [HackTheBox - PC](/machines/pc.html).
+> Linux Machine; gRPC; Running Services Enumeration; SQLite Injection; pyLoad;
