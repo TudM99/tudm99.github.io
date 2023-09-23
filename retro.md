@@ -43,6 +43,8 @@ Let's try logging into wordpress with that word as a password, and I'll try a fe
 
 And we're in!
 
+## Exploitation
+
 Now we'll use the good ol' theme editor to get a reverse shell on the system.
 
 I'll use Twenty Seventeen, with a php shell from Ivan Sincek, but you can go ahead and experiment. Replace the 404.php content with your shell, and launch it.
