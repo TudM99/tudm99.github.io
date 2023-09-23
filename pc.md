@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Internal
-description: THM - Internal
+title: PC
+description: HTB - PC
 ---
 
 ## Enumeration
