@@ -15,5 +15,5 @@ I'm gonna be posting my cybersecurity progress, and other stuff I find interesti
 ## [TryHackMe - Wekor](./wekor.md).
 > Linux Machine; Running Services; PATH Manipulation for Privesc; SQL Injection; Wordpress Theme Shell; Memcached;
 
-## [TryHackMe - Tech_Supp0rt: 1](./internal.md).
+## [TryHackMe - Tech_Supp0rt: 1](./techsupp1.md).
 > SMB Enumeration; Wordpress; Subrion CMS CVE;
