@@ -1,7 +1,7 @@
 
 ---
 layout: default
-title: Another page
+title: Internal
 description: Internal - Writeup
 ---
 
