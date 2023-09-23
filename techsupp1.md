@@ -21,9 +21,9 @@ Service Info: Host: TECHSUPPORT; OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ```
 ```
-/wordpress           	 	(Status: 301) [Size: 316]
-/test                 				(Status: 301) [Size: 311]
-/server-status        	(Status: 403) [Size: 277]
+/wordpress       (Status: 301) [Size: 316]
+/test            (Status: 301) [Size: 311]
+/server-status   (Status: 403) [Size: 277]
 ```
 
 [back](./)
