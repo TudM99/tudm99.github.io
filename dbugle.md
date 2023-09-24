@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Wekor
-description: THM - Wekor
+title: Daily Bugle
+description: THM - Daily Bugle
 ---
 
 ## Enumeration
