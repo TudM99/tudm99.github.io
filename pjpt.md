@@ -62,9 +62,9 @@ Affordable, great course provided, and helpful support team.
 
 I urge you to take this. And if you have the money, go for the PNPT. 
 
-Join the community -> https://discord.gg/tcm
+Join the community -> ![discord](https://discord.gg/tcm)
 
-Subscribe to Heath -> https://www.youtube.com/@TCMSecurityAcademy
+Subscribe to Heath -> ![youtube](https://www.youtube.com/@TCMSecurityAcademy)
 
-PJPT Link -> https://certifications.tcm-sec.com/pjpt/
+PJPT Link -> ![pjpt](https://certifications.tcm-sec.com/pjpt/)
 
