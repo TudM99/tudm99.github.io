@@ -20,5 +20,5 @@ I'll try adding how many of my past machines I can, going over them again with a
 ## [TryHackMe - Tech_Supp0rt: 1](./techsupp1.md).
 > SMB Enumeration; Wordpress; Subrion CMS CVE;
 
-## [Bypassed Bitdefender with a C payload](./noalert.md).
+## [Bypassed Bitdefender with a C payload](./noalert.html).
 > AV Bypass; C Payload; Meterpreter;
