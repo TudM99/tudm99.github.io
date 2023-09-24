@@ -5,6 +5,9 @@ I'm gonna be posting some writeups, and some issues I noticed while practicing i
 
 I'll try adding how many of my past machines I can, going over them again with a new perspective.
 
+## [Bypassed Bitdefender with a C payload](./noalert.html).
+> AV Bypass; C Payload; Meterpreter;
+
 ## [TryHackMe - Retro](./retro.md).
 > Windows Machine; Wordpress Theme Shell; Metasploit;
 
@@ -20,5 +23,3 @@ I'll try adding how many of my past machines I can, going over them again with a
 ## [TryHackMe - Tech_Supp0rt: 1](./techsupp1.md).
 > SMB Enumeration; Wordpress; Subrion CMS CVE;
 
-## [Bypassed Bitdefender with a C payload](./noalert.html).
-> AV Bypass; C Payload; Meterpreter;
