@@ -5,6 +5,9 @@ I'm gonna be posting some writeups, and some issues I noticed while practicing i
 
 I'll try adding how many of my past machines I can, going over them again with a new perspective.
 
+## [TryHackMe - Ra](./ra.md).
+> PJPT; TCM-Security;
+
 ## [TryHackMe - Daily Bugle](./dbugle.md).
 > PJPT; TCM-Security;
 
