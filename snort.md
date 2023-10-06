@@ -21,8 +21,11 @@ After snort is installed:
 cat /etc/snort/snort.conf
 ```
 and edit the "HOME_NET" line, to point to your CIDR.
+
 ![01](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/01_Snort_Home_net_setup.png)
+
 After this, you must set up promiscuous mode on your ubuntu machine.
+
 ![001](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/001_Snort_Version_And_Promisc.png)
 
 When that was also done, for my testing purposes, I commented out the ICMP rules in the snort.conf file, so we can add our own.
@@ -35,7 +38,9 @@ sudo snort -T -i <interface> -c /etc/snort/snort.conf
 ```
 And the results are as follows:
 ![03](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/03_Snort_Config_Testing.png)
+
 ![04](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/04_Snort_Config_Testing_Rules_Loaded.png)
+
 ![05](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/05_Snort_Config_Testing_Success.png)
 
 The rules were loaded, and our config file works.
