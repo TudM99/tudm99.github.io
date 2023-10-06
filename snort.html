@@ -72,34 +72,34 @@ background-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(117,15,15,1) 45%
 </code></pre></div></div>
 <p>and edit the “HOME_NET” line, to point to your CIDR.</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/01_Snort_Home_net_setup.png" alt="01" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/01_Snort_Home_net_setup.png" alt="01" class="bd"/></p>
 
 <p>After this, you must set up promiscuous mode on your ubuntu machine.</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/001_Snort_Version_And_Promisc.png" alt="001" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/001_Snort_Version_And_Promisc.png" alt="001" class="bd"/></p>
 
 <p>When that was also done, for my testing purposes, I commented out the ICMP rules in the snort.conf file, so we can add our own.</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/02_Comment_out_ICPM.png" alt="02" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/02_Comment_out_ICPM.png" alt="02" class="bd"/></p>
 
 <p>And now we can test our snort configuration, by running:</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo snort -T -i &lt;interface&gt; -c /etc/snort/snort.conf
 </code></pre></div></div>
 <p>And the results are as follows:</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/03_Snort_Config_Testing.png" alt="03" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/03_Snort_Config_Testing.png" alt="03" class="bd"/></p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/04_Snort_Config_Testing_Rules_Loaded.png" alt="04" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/04_Snort_Config_Testing_Rules_Loaded.png" alt="04" class="bd"/></p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/05_Snort_Config_Testing_Success.png" alt="05" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/05_Snort_Config_Testing_Success.png" alt="05" class="bd"/></p>
 
 <p>The rules were loaded, and our config file works.</p>
 
 <p>Now let’s get to the demo, where first I’ll ping the windows 10 machine without any ICMP rules, and after that, I’ll add an ICMP rule to see if I catch it.</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/06_windows_and_snort_windowsip_noping_rule.png" alt="06" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/06_windows_and_snort_windowsip_noping_rule.png" alt="06" class="bd"/></p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/07_ICMP_No_alert.png" alt="07" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/07_ICMP_No_alert.png" alt="07" class="bd"/></p>
 
 <p>As you can see, we didn’t get any alerts regarding the pings.</p>
 
@@ -107,11 +107,11 @@ background-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(117,15,15,1) 45%
 
 <p>You can add your own rules to “/etc/snort/rules/local.rules”</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/08_ICMP_Rule_Set.png" alt="08" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/08_ICMP_Rule_Set.png" alt="08" class="bd"/></p>
 
 <p>And now if we save it, re-run snort, and ping the machine again:</p>
 
-<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/09_ICMP_Ding_Dong.png" alt="09" /></p>
+<p><img width="100%" height="auto" src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/09_ICMP_Ding_Dong.png" alt="09" class="bd"/></p>
 
 <p>Bingo! We caught the ping.</p>
 
