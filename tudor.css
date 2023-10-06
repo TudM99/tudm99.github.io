@@ -30,3 +30,6 @@ background-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(117,15,15,1) 45%
   background-color: transparent;
   text-decoration: none;
 }
+img {
+  border: 2px solid #000;
+}
