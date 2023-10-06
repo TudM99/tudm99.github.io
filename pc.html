@@ -69,7 +69,7 @@ PORT      STATE SERVICE VERSION
 </code></pre></div></div>
 <p>Ok, 2 ports open, one unknown. Let’s search it up and find out what’s what.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_01.png" alt="image" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_01.png" alt="image" class="bd"/></p>
 
 <p>So gRPC. Good, we now have something we can look into.</p>
 
@@ -79,30 +79,30 @@ PORT      STATE SERVICE VERSION
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># /root/go/bin/grpcui -plaintext 10.10.11.214:50051
 gRPC Web UI available at http://127.0.0.1:34621/
 </code></pre></div></div>
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_02.png" alt="image" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_02.png" alt="image" class="bd"/></p>
 
 <p>We’ll now attempt to register a user, using the “RegisterUser” function, and check the output.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_03.png" alt="image" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_03.png" alt="image" class="bd"/></p>
 
 <p>Great! Our account appears to have been created. Let’s try logging in.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_04.png" alt="image" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_04.png" alt="image" class="bd"/></p>
 
 <p>We now have a token, which we can input in this field, and use the “getInfo” function:</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_05.png" alt="token" />
-<img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_06.png" alt="token" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_05.png" alt="token" class="bd"/>
+<img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_06.png" alt="token" class="bd"/></p>
 
 <p>Response for the “getInfo” function:</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_07.png" alt="getinfo" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_07.png" alt="getinfo" class="bd"/></p>
 
 <p>We didn’t get much info, so let’s try seeing the request in burp.</p>
 
 <p>We’ll start burp in proxy mode, capture the request, and send it to repeater to check if we can alter it in some way.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_08.png" alt="burp" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_08.png" alt="burp" class="bd"/></p>
 
 <p>I tried inputing different values (1, 0, etc) no output was given, I tried a php payload out of desperation, still didn’t work.</p>
 
@@ -164,7 +164,7 @@ sau@10.10.11.214's password:
 </code></pre></div></div>
 <p>And we are met by a pyLoad login page:</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_09.png" alt="pyload" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/pc_09.png" alt="pyload" class="bd"/></p>
 
 <h2 id="privilege-escalation" class="enum">Privilege Escalation</h2>
 
