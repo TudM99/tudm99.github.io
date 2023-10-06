@@ -37,6 +37,7 @@ And now we can test our snort configuration, by running:
 sudo snort -T -i <interface> -c /etc/snort/snort.conf
 ```
 And the results are as follows:
+
 ![03](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/03_Snort_Config_Testing.png)
 
 ![04](https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/04_Snort_Config_Testing_Rules_Loaded.png)
