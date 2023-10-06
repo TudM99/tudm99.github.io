@@ -109,7 +109,7 @@ Disallow: /interesting
 
 <p>Next on our list, is the coupon code field on the cart page.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_01.png" alt="cart" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_01.png" alt="cart" class="bd"/></p>
 
 <p>Let’s apply a “test” coupon, and send that request to sqlmap.</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqlmap -r cart_req.req --dump-all --batch --level 5 --risk 3 
@@ -118,11 +118,11 @@ Disallow: /interesting
 
 <p>I won’t let you sort it on your own, the info we need is in the “wordpress” folder.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_02.png" alt="wp_folder" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_02.png" alt="wp_folder" class="bd"/></p>
 
 <p>Open and inspect the “wp_users.csv” file.</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_03.png" alt="wp_users" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_03.png" alt="wp_users" class="bd"/></p>
 
 <p>We found a list of users and password hashes.</p>
 
@@ -148,7 +148,7 @@ Disallow: /interesting
 
 <p>Aaand, we have dashboard access!</p>
 
-<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_04.png" alt="dashboard" /></p>
+<p><img src="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/wekor_04.png" alt="dashboard" class="bd"/></p>
 
 <h2 id="exploitation" class="enum">Exploitation</h2>
 
