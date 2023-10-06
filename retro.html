@@ -57,7 +57,7 @@ background-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(117,15,15,1) 45%
     </header>
 <div class="sharethis-sticky-share-buttons"></div>
     <main id="content" class="main-content" role="main">
-      <h2 id="enumeration">Enumeration</h2>
+      <h2 id="enumeration" class="enum">Enumeration</h2>
 <p>Nmap:</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting Nmap 7.94 ( https://nmap.org ) at 2023-09-23 20:18 EEST
 Nmap scan report for 10.10.190.35
@@ -94,7 +94,7 @@ The host OS is windows, so we may need to look into some powershell later on.</p
 
 <p>And we’re in!</p>
 
-<h2 id="exploitation">Exploitation</h2>
+<h2 id="exploitation" class="enum">Exploitation</h2>
 
 <p>Now we’ll use the good ol’ theme editor to get a reverse shell on the system.</p>
 
@@ -178,7 +178,7 @@ meterpreter &gt;
 </code></pre></div></div>
 <p>Nice, we have a meterpreter shell.</p>
 
-<h2 id="privilege-escalation">Privilege Escalation:</h2>
+<h2 id="privilege-escalation" class="enum">Privilege Escalation:</h2>
 
 <p>We’ll use the default meterpreter “getsystem” command.</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>meterpreter &gt; getsystem
@@ -192,7 +192,7 @@ Server username: NT AUTHORITY\SYSTEM
 
 <p><a href="https://tryhackme.com/room/retro">Try it out yourself!</a></p>
 
-<p><a href="./"><h2 id="goback">Go back</h2></a></p>
+<p><a href="./"><h2 id="goback" class="link">Go back</h2></a></p>
 
 
       <footer class="site-footer">
