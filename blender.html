@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=65103d22637e200019cd3518&product=sticky-share-buttons&source=platform" async="async"></script>
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Blender Revshell</title>
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/TudM99/tudm99.github.io/main/images/tlsec_ico.ico">
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="AV Bypass" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Using a Blender add-on to gain a reverse shell." />
+<meta property="og:description" content="Using a Blender add-on to gain a reverse shell." />
+<link rel="canonical" href="https://tudm99.github.io/blender.html" />
+<meta property="og:url" content="https://tudm99.github.io/blender.html" />
+<meta property="og:site_name" content="tudor.mindra" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Blender Revshell" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Using a Blender add-on to gain a reverse shell.","headline":"Blender Revshell","url":"https://tudm99.github.io/blender.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=fd496603e56c7f116ea70106f8c35b63110b72ea">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+<style>
+  .page-header {
+color: #fff;
+text-align: center;
+background-color: rgb(0,0,0);
+background-image: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(117,15,15,1) 45%, rgba(0,0,0,1) 100%); }
+</style>
+<link rel="stylesheet" href="tudor.css">
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Blender Revshell</h1>
+      <h2 class="project-tagline">Using a Blender add-on to gain a reverse shell.</h2>
+      
+      
+    </header>
+<div class="sharethis-sticky-share-buttons"></div>
+    <main id="content" class="main-content" role="main">
+      <p>Hey there! Recently I started delving into 3D again, figured I'd take a break from cyber for the weekend. Last night though, I wanted to finish rendering an animation I've been working on, but I was really tired, so I looked around for an addon to shutdown my PC after completing the render.</p>
+
+<p>Found the addon, saw the .py file, and immediately my mind went "put a shell in it". And so I did. I woke up this morning, uninstalled the add-on, modified it with a revshell, and installed it back in.</p>
+
+<p>As you can see in the video below, defender didn't make a fuss, and the shell worked perfectly on the receiving end. The only issue is blender will stop responding while the shell is active. But blender being blender, most users with an important project open will wait for it to respond, giving you enough time to use the netcat shell to upload a more robust, unrelated (to blender) shell.</p>
+
+
+<p><video width="100%" height="auto" controls>
+  <source src="https://github.com/TudM99/tudm99.github.io/raw/main/images/blender_ncat_1.mp4" type="video/mp4">
+  
+</video></p>
+
+<p>If we take into consideration the fact that most initial attacks nowadays are automated, with a separate shell being instantly uploaded and calling back to the C2 once the initial compromise is successful, I don't think blender's responsiveness, or lack thereof, is gonna be an issue for a potential attacker.</p>
+
+<p>If you're working with community add-ons, please be careful and inspect them a bit before installing / using them. Yes, my shell may disturb blender's functionality, but it's rudimentary, easy to spot, and not implemented with stealth in mind.</p>
+
+<p>Take care!</p>
+
+<p><a href="./" class="link"><h2 id="goback" class="link">Go back</h2></a></p>
+
+
+      <footer class="site-footer">
+        
+      </footer>
+    </main>
+  </body>
+</html>
